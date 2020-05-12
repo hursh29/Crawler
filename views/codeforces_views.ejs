@@ -1,0 +1,234 @@
+<html>
+<head>  
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>  
+    <% const submissions = [] %>
+    <% cons tags = [] %>
+    <h1> Hello Codeforces !!!</h1>
+    <h2> this is <b> <%= ejs_user%> </b></h2>
+    <h2> total Number of submissions made <%= ejs_total%> </h2>
+    <h2> total Number of <strong> ACCEPTED </strong> submissions <%= ejs_ACCEPTED %></h2>
+    <% const N = ejs_array_submissions.length %>  
+    <%   for(var i = 0 ; i < N ; i++ ){  %>  
+            submissions.push(<%= ejs_array_submissions[i]%>) 
+            tags.push( <%= ejs_array_tags[i] %>)  
+    <% } %> 
+    <canvas id="myChart1"></canvas>
+    <h2> accpetance rate of <%= ejs_user%> is <%= ejs_acceptance.toFixed(25) %> </h2> 
+    <canvas id="myChart"></canvas> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
+    <script>  
+        var ctx = document.getElementById('myChart1').getContext('2d');
+        
+        var chart = new Chart(ctx, {
+        type: 'bar', 
+        data: {
+            labels: ['blaah'],
+            // ['dp',
+            //     'greedy',
+            //     'constructive_algorithms',
+            //     'interactive',
+            //     'math',
+            //     'brute_force',
+            //     'divide_and_conquer',
+            //     'dfs_and_similar',
+            //     'dsu',
+            //     'graphs',
+            //     'strings',
+            //     'number_theory',
+            //     'games',
+            //     'sortings',
+            //     'data_structures',
+            //     'binary_search',
+            //     'two_pointers',
+            //     'shortest_paths',
+            //     'geometry',
+            //     'bitmasks',
+            //     'trees',
+            //     'expression_parsing',
+            //     'implementation',
+            //     'ternary_search',
+            //     'combinatorics',
+            //     'hashing',
+            //     'string_suffix_structures',
+            //     'meet_in_the_middle',
+            //     'graph_matchings',
+            //     ' chinese_remainder_theorem',
+            //     '_special',
+            //     'matrices',
+            //     'probabilities',
+            //     'fft',
+            //     'flows',
+            //     '__sat',
+            //     'schedules'],
+            datasets: 
+            [
+                {
+                    label: 'Tag-Wise-Distribution',
+                    borderWidth : 2,
+                    barThickness : 8,
+                    hoverBorderColor : 'rgb(0, 0, 0)',
+                    hoverBorderWidth : 2,
+                    hoverBackgroundColor: 'rgb(45, 45 ,141)',
+                    backgroundColor:[ getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor()                  
+                    ],
+                    borderColor: 'rgba(255, 0, 0,0.6)',
+                    data: [1] 
+                    // <%= JSON.stringify(ejs_array_submissions)  %>
+                }
+            ]
+        }, 
+        options: {}
+        });
+        
+        // addData(chart,<%= ejs_array_tags[0] %>,200); 
+        // Configuration options go here
+        
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+        type: 'doughnut', 
+        data: {
+            labels: ['dp',
+                'greedy',
+                'constructive_algorithms',
+                'interactive',
+                'math',
+                'brute_force',
+                'divide_and_conquer',
+                'dfs_and_similar',
+                'dsu',
+                'graphs',
+                'strings',
+                'number_theory',
+                'games',
+                'sortings',
+                'data_structures',
+                'binary_search',
+                'two_pointers',
+                'shortest_paths',
+                'geometry',
+                'bitmasks',
+                'trees',
+                'expression_parsing',
+                'implementation',
+                'ternary_search',
+                'combinatorics',
+                'hashing',
+                'string_suffix_structures',
+                'meet_in_the_middle',
+                'graph_matchings',
+                ' chinese_remainder_theorem',
+                '_special',
+                'matrices',
+                'probabilities',
+                'fft',
+                'flows',
+                '__sat',
+                'schedules'],
+            datasets: 
+            [
+                {
+                    label: 'Tag-Wise-Distribution',
+                    borderWidth : 2,
+                    barThickness : 8,
+                    hoverBorderColor : 'rgb(0, 0, 0)',
+                    hoverBorderWidth : 2,
+                    hoverBackgroundColor: 'rgb(45, 45 ,141)',
+                    backgroundColor:[ getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor(),
+                    getRandomColor()                  
+                    ],
+                    borderColor: 'rgba(255, 0, 0,0.6)',
+                    data: <%= JSON.stringify(ejs_array_submissions)  %>
+                }
+            ]
+        }, 
+        // addData(chart,<%= ejs_array_tags[0] %>,200);
+
+        // Configuration options go here
+        options: {
+
+        }
+        });
+        function getRandomColor() {                                    
+        var letters = '0123456789ABCDEF';                             
+        var color = '#';                                              
+        for (var i = 0; i < 6; i++) {                                 
+            color += letters[Math.floor(Math.random() * 16)];         
+        }                                                             
+        return color; }                                                     
+
+
+    </script>  
+</body>
+</html>
