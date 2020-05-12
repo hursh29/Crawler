@@ -5,15 +5,15 @@
 </head>
 <body>  
     <% const submissions = [] %>
-    <% cons tags = [] %>
+    <% const tags = [] %>
     <h1> Hello Codeforces !!!</h1>
     <h2> this is <b> <%= ejs_user%> </b></h2>
     <h2> total Number of submissions made <%= ejs_total%> </h2>
     <h2> total Number of <strong> ACCEPTED </strong> submissions <%= ejs_ACCEPTED %></h2>
     <% const N = ejs_array_submissions.length %>  
     <%   for(var i = 0 ; i < N ; i++ ){  %>  
-            submissions.push(<%= ejs_array_submissions[i]%>) 
-            tags.push( <%= ejs_array_tags[i] %>)  
+        <%    submissions.push(ejs_array_submissions[i]) %>
+        <%    tags.push((ejs_array_tags[i]))  %>
     <% } %> 
     <canvas id="myChart1"></canvas>
     <h2> accpetance rate of <%= ejs_user%> is <%= ejs_acceptance.toFixed(25) %> </h2> 
@@ -21,7 +21,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
     <script>  
         var ctx = document.getElementById('myChart1').getContext('2d');
-        
+        for(let i = 0 ; i < <%= N %> ; i++ ){
+            // console.log(<%= tags[i] %>);
+            addData(chart1,<%= tags[i] %>, <%= submissions[i] %>,getRandomColor());
+        }
         var chart = new Chart(ctx, {
         type: 'bar', 
         data: {
@@ -117,7 +120,8 @@
         }, 
         options: {}
         });
-        
+
+
         // addData(chart,<%= ejs_array_tags[0] %>,200); 
         // Configuration options go here
         
@@ -221,14 +225,19 @@
         }
         });
         function getRandomColor() {                                    
-        var letters = '0123456789ABCDEF';                             
-        var color = '#';                                              
-        for (var i = 0; i < 6; i++) {                                 
-            color += letters[Math.floor(Math.random() * 16)];         
-        }                                                             
-        return color; }                                                     
-
-
+            var letters = '0123456789ABCDEF';                             
+            var color = '#';                                              
+            for (var i = 0; i < 6; i++) {                                 
+                color += letters[Math.floor(Math.random() * 16)];         
+            }                                                             
+            return color; 
+        }
+        function addData(chart, label, color, data) {
+            chart.data.datasets[0].data.push(data);
+            chart.data.labels.push(label);
+            chart.data.datasets[0].backgroundColor.push(color);   
+            chart.update();
+        }                                                     
     </script>  
 </body>
 </html>
