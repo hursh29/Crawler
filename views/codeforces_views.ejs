@@ -1,251 +1,182 @@
 <html>
-<head>  
+
+<head>
     <title> Crawler </title>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>  
-    <% const submissions = [] %>
-    <% const tags = [] %>
-    <h1> Hello Codeforces !!!</h1>
-    <h2> this is <b> <%= ejs_user%> </b></h2>
-    <h2> total Number of submissions made <%= ejs_total%> </h2>
-    <h2> total Number of <strong> ACCEPTED </strong> submissions <%= ejs_ACCEPTED %></h2>
-    <% const N = ejs_array_submissions.length %>  
-    <%   for(var i = 0 ; i < N ; i++ ){  %>  
-        <%    submissions.push(ejs_array_submissions[i]) %>
-        <%    tags.push((ejs_array_tags[i]))  %>
-    <% } %> 
-    <canvas id="myChart1"></canvas>
-    <h2> accpetance rate of <%= ejs_user%> is <%= ejs_acceptance.toFixed(25) %> </h2> 
-    <canvas id="myChart"></canvas> 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
-    <script>  
-        var ctx = document.getElementById('myChart1').getContext('2d');
-        // const submissions_strings =  (<%= ejs_array_submissions %>) ;
-        // console.log(typeof(submissions_strings)); 
-        // const result_submissions = submissions_strings.split(',');
-        // const tags_strings =  <%= ejs_array_tags %>  ; 
-        // console.log(typeof(<%= ejs_array_tags%>));
-        // const result_tags = tags_strings.split(',');
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        // for(let i = 0 ; i < <%= N %> ; i++ ){
-            // console.log(<%= tags[i] %>);
-            // console.log(result_tags[i]);
-            // addData(chart1,<%= tags[i] %>, <%= submissions[i] %>,getRandomColor());
-        // }
-        var chart = new Chart(ctx, {
-        type: 'bar', 
-        data: {
-            labels: 
-            ['dp',
-                'greedy',
-                'constructive_algorithms',
-                'interactive',
-                'math',
-                'brute_force',
-                'divide_and_conquer',
-                'dfs_and_similar',
-                'dsu',
-                'graphs',
-                'strings',
-                'number_theory',
-                'games',
-                'sortings',
-                'data_structures',
-                'binary_search',
-                'two_pointers',
-                'shortest_paths',
-                'geometry',
-                'bitmasks',
-                'trees',
-                'expression_parsing',
-                'implementation',
-                'ternary_search',
-                'combinatorics',
-                'hashing',
-                'string_suffix_structures',
-                'meet_in_the_middle',
-                'graph_matchings',
-                ' chinese_remainder_theorem',
-                '_special',
-                'matrices',
-                'probabilities',
-                'fft',
-                'flows',
-                '__sat',
-                'schedules'],
-            datasets: 
-            [
-                {
-                    label: 'Tag-Wise-Distribution',
-                    borderWidth : 2,
-                    barThickness : 8,
-                    hoverBorderColor : 'rgb(0, 0, 0)',
-                    hoverBorderWidth : 2,
-                    hoverBackgroundColor: 'rgb(45, 45 ,141)',
-                    backgroundColor:[ getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor()                  
-                    ],
-                    borderColor: 'rgba(255, 0, 0,0.6)',
-                    data: <%= JSON.stringify(ejs_array_submissions)  %>
-                }
-            ]
-        }, 
-        options: {}
+</head>
+
+<body>
+    <div class="container" style="width: 80%; text-align: center; background-color: whitesmoke;">
+        <h1 style="color: rgb(57, 90, 235)0);"> Your Performance </h1>
+        <div id="userInfo"></div>
+        <canvas id="tagsChartBar" style="margin-bottom: 5%;"></canvas>
+        <div style="margin-bottom: 7%;">
+            <canvas id="tagsChartDoughNut"></canvas>
+        </div>
+        <div style="margin-bottom: 7%;">
+            <canvas id="verdictsChartDoughNut"></canvas>
+        </div>
+        <div class="btn btn-success" style="width: 80%; margin-bottom: 10%; background-color: rgb(84, 82, 202);">
+            <a href="/ratings" style="color :rgb(255, 255, 255);"> back </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        const initialize_tags = ['dp', 'greedy', 'constructive algorithms', 'chinese remainder theorem', 'interactive', 'math', 'brute force', 'divide and conquer', 'dfs and similar', 'dsu', 'graphs', 'strings', 'number theory', 'games', 'sortings', 'data structures', 'binary search', 'two pointers', 'shortest paths', 'geometry', 'bitmasks', 'trees', 'expression parsing', 'implementation', 'ternary search', 'combinatorics', 'hashing', 'string suffix structures', 'meet-in-the-middle', 'graph matchings', ' chinese remainder theorem', '*special', 'matrices', 'probabilities', 'fft', 'flows', 'schedules', '2-sat'];
+        const initialize_language = ['GNU G++11 5.1.0', 'GNU G++14 6.4.0', 'GNU G++17 7.3.0', 'GNU GCC C11 5.1.0', 'Microsoft Visual C++ 2010', 'Microsoft Visual C++ 2017', 'Clang++17 Diagnostics', 'GNU G++17 9.2.0 (64 bit, msys 2)', 'C# Mono 5.18', 'D DMD32 v2.091.0', 'Go 1.14', 'Haskell GHC 8.6.3', 'Java 11.0.5', 'Java 1.8.0_162', 'Kotlin 1.3.70', 'OCaml 4.02.1', 'Delphi 7', 'Free Pascal 3.0.2', 'PascalABC.NET 3.4.2', 'Perl 5.20.1', 'PHP 7.2.13', 'Python 2.7.15', 'Python 3.7.2', 'PyPy 2.7 (7.2.0)', 'PyPy 3.6 (7.2.0)', 'Ruby 2.0.0p645', 'Rust 1.42.0', 'Scala 2.12.8', 'JavaScript V8 4.8.0', 'Node.js 9.4.0']
+        const initialize_verdicts = ['OK', 'COMPILATION_ERROR', 'CHALLENGED', 'WRONG_ANSWER', 'RUNTIME_ERROR', 'TIME_LIMIT_EXCEEDED', 'MEMORY_LIMIT_EXCEEDED'];
+        let tagsMap = new Map();
+        let verdictsMap = new Map();
+        initialize_tags.forEach(element => {
+            tagsMap[element] = 0;
+        });
+        initialize_verdicts.forEach(element => {
+            verdictsMap[element] = 0;
         });
 
-
-        // addData(chart,<%= ejs_array_tags[0] %>,200); 
-        // Configuration options go here
-        
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var chart = new Chart(ctx, {
-        type: 'doughnut', 
-        data: {
-            labels: ['dp',
-                'greedy',
-                'constructive_algorithms',
-                'interactive',
-                'math',
-                'brute_force',
-                'divide_and_conquer',
-                'dfs_and_similar',
-                'dsu',
-                'graphs',
-                'strings',
-                'number_theory',
-                'games',
-                'sortings',
-                'data_structures',
-                'binary_search',
-                'two_pointers',
-                'shortest_paths',
-                'geometry',
-                'bitmasks',
-                'trees',
-                'expression_parsing',
-                'implementation',
-                'ternary_search',
-                'combinatorics',
-                'hashing',
-                'string_suffix_structures',
-                'meet_in_the_middle',
-                'graph_matchings',
-                ' chinese_remainder_theorem',
-                '_special',
-                'matrices',
-                'probabilities',
-                'fft',
-                'flows',
-                '__sat',
-                'schedules'],
-            datasets: 
-            [
-                {
-                    label: 'Tag-Wise-Distribution',
-                    borderWidth : 2,
-                    barThickness : 8,
-                    hoverBorderColor : 'rgb(0, 0, 0)',
-                    hoverBorderWidth : 2,
-                    hoverBackgroundColor: 'rgb(45, 45 ,141)',
-                    backgroundColor:[ getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor(),
-                    getRandomColor()                  
-                    ],
-                    borderColor: 'rgba(255, 0, 0,0.6)',
-                    data: <%= JSON.stringify(ejs_array_submissions)  %>
-                }
-            ]
-        }, 
-        // addData(chart,<%= ejs_array_tags[0] %>,200);
-
-        // Configuration options go here
-        options: {
+        const ourRequest = new XMLHttpRequest();
+        let url = `https://codeforces.com/api/user.status?handle=`;
+        url += `<%= ejs_user %>`;
+        ourRequest.open('GET', url);
+        ourRequest.onload = function () {
+            const ourData = JSON.parse(ourRequest.responseText);
+            if (ourData['status'] != 'OK')
+                return console.log("Sorry couldn't connect :(");
+            renderHTML(ourData);
+            insertData();
+            // insertAverage();
+        }
+        ourRequest.send();
+        function renderHTML(ourData) {
+            ourData['result'].forEach(element => {
+                const tags = element['problem']['tags'];
+                tags.forEach(problemTags => {
+                    tagsMap[problemTags]++;
+                });
+                verdictsMap[element['verdict']]++;
+            });
 
         }
-        });
-        function getRandomColor() {                                    
-            var letters = '0123456789ABCDEF';                             
-            var color = '#';                                              
-            for (var i = 0; i < 6; i++) {                                 
-                color += letters[Math.floor(Math.random() * 16)];         
-            }                                                             
-            return color; 
+        function insertData() {
+            var ctx = document.getElementById('tagsChartBar').getContext('2d');
+            var tagsChartBar = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets:
+                        [
+                            {
+                                label: 'tags based',
+                                borderWidth: 2.5,
+                                barThickness: 7,
+                                hoverBorderColor: 'rgb(0, 0, 0)',
+                                hoverBorderWidth: 1.5,
+                                hoverBackgroundColor: 'rgb(74, 25, 250)',
+                                backgroundColor: [],
+                                borderColor: 'rgb(194, 191, 0)',
+                                data: []
+                            }
+
+                        ]
+
+                },
+                options: {
+                }
+            });
+            var ctX = document.getElementById('tagsChartDoughNut').getContext('2d');
+            var tagsChartDoughNut = new Chart(ctX, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets:
+                        [
+                            {
+                                label: 'tags based',
+                                borderWidth: 3,
+                                barThickness: 7,
+                                hoverBorderColor: 'rgb(0, 0, 0)',
+                                hoverBorderWidth: 1.5,
+                                hoverBackgroundColor: 'rgb(74, 25, 250)',
+                                backgroundColor: [],
+                                borderColor: 'rgb(255, 255, 255)',
+                                data: []
+                            }
+
+                        ]
+
+                },
+                options: {
+                }
+            });
+            var cTX = document.getElementById('verdictsChartDoughNut').getContext('2d');
+            var verdictsChartDoughNut = new Chart(cTX, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets:
+                        [
+                            {
+                                label: 'verdicts based',
+                                borderWidth: 3,
+                                barThickness: 7,
+                                hoverBorderColor: 'rgb(0, 0, 0)',
+                                hoverBorderWidth: 1.5,
+                                hoverBackgroundColor: 'rgb(74, 25, 250)',
+                                backgroundColor: [],
+                                borderColor: 'rgb(255, 255, 255)',
+                                data: []
+                            }
+
+                        ]
+
+                },
+                options: {
+                }
+            });
+
+
+            for (const key in tagsMap) {
+                addData(tagsChartBar, key, 'rgb(244, 255, 87)', tagsMap[key]);
+                addData(tagsChartDoughNut, key, getRandomColor(), tagsMap[key]);
+            }
+            for (const key in verdictsMap) {
+                addData(verdictsChartDoughNut, convert(key), getRandomColor(), verdictsMap[key]);
+            }
+        }
+        function convert(key) {
+            if (key == "OK")
+                return "Accepted";
+            if (key == "WRONG_ANSWER")
+                return "Wrong answer";
+            if (key == "COMPILATION_ERROR")
+                return "Compilation error";
+            if (key == "CHALLENGED")
+                return "Challenged";
+            if (key == "TIME_LIMIT_EXCEEDED")
+                return "Time limit exceeded";
+            if (key == "MEMORY_LIMIT_EXCEEDED")
+                return "Memory limit exceeded";
+            return 'Runtime error';
+        }
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
         function addData(chart, label, color, data) {
             chart.data.datasets[0].data.push(data);
             chart.data.labels.push(label);
-            chart.data.datasets[0].backgroundColor.push(color);   
+            chart.data.datasets[0].backgroundColor.push(color);
             chart.update();
         }                                                     
-    </script>  
+    </script>
 </body>
+
 </html>

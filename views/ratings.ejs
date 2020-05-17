@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Crawler</title>
+    <style>
+        * {
+            text-align: center;
+            background-color: whitesmoke;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body> 
+    <div class="container">
+    
+        <h1 id="user color"> <%= ejs_user %> </h1>
+        <h1 style="margin-bottom: 0em;">Hello, Codeforces!</h1>
+
+        <div class="col" style="padding-top: 1em; padding-bottom: 1em; ">
+            <button type="button" class="btn btn-primary" id="getDataRatings"> get data</button>
+        </div>
+        <canvas id="ratings"></canvas>
+        <div id="ImpInfo"> </div>
+        <canvas id="allUsersChart"></canvas>
+        <div id="userAverage" ></div> 
+        <canvas id="allUsersChartWide"></canvas>
+        <div class="btn btn-primary " style="width: 80%; margin-bottom: 2%;">
+            <a href="/tags" style="color: white;"> tags wise distribution </a>
+        </div>
+        <br>
+        <div class="btn btn-warning " style="width: 80%; margin-bottom: 10%;">
+            <a href="/" style="color: white;"> back </a>
+        </div>
+        
+    </div> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    
+    <script type="text/javascript" src="ratings.js"></script>
+    <script type="text/javascript">
+
+        var getDataBtn = document.getElementById("getDataRatings");
+        getDataBtn.addEventListener("click", function () {
+            const ourRequest = new XMLHttpRequest();
+            let url = 'https://codeforces.com/api/user.rating?handle=';
+            url += `<%= ejs_user %>`  ;
+            ourRequest.open('GET', url);
+            ourRequest.onload = function () {
+                const ourData = JSON.parse(ourRequest.responseText);
+                if (ourData['status'] != 'OK')
+                    return console.log("Sorry couldn't connect :(");
+                renderHTML(ourData);
+            }
+            getDataBtn.innerHTML = 'Best of Luck';
+            getDataBtn.style.backgroundColor = '#4CBB17';
+            ourRequest.send();
+
+            var ctx = document.getElementById('ratings').getContext('2d');
+            var ratingsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['0'],
+                    datasets:
+                        [
+                            {
+                                label: 'rating changes',
+                                borderWidth: 2,
+                                barThickness: 8,
+                                hoverBorderColor: 'rgb(0, 0, 0)',
+                                hoverBorderWidth: 2,
+                                hoverBackgroundColor: 'rgb(45, 45 ,141)',
+                                backgroundColor: '#FFB6C1',
+                                borderColor: 'rgba(255, 0, 0,0.6)',
+                                data: [0]
+                            },
+                            {
+                                label: 'rating',
+                                borderWidth: 2,
+                                barThickness: 8,
+                                hoverBorderColor: 'rgb(0, 0, 0)',
+                                hoverBorderWidth: 2,
+                                hoverBackgroundColor: 'rgb(45, 45 ,141)',
+                                backgroundColor: '#FFFF99',
+                                borderColor: 'rgba(255, 0, 0,0.6)',
+                                data: [1500 - 1000]
+                            }
+
+                        ]
+
+                },
+                options: {
+
+                }
+            });
+            var selectingImpInfo = document.getElementById('ImpInfo');
+            selectingImpInfo.insertAdjacentHTML('beforeEnd',`<p style="margin-bottom: 0em;"> <strong>*all the ratings are relative to 1000</strong></p>`);
+            selectingImpInfo.insertAdjacentHTML('beforeEnd',`<p> <strong>*rating changes are absolute</strong></p>`);
+            function renderHTML(ourData) {
+                ourData['result'].forEach(element => {
+                    const change = element['newRating'] - element['oldRating'];
+                    addData(ratingsChart, element['ratingUpdateTimeSeconds'], element['newRating'] - 1000, 1);
+                    ratingsChart.data.datasets[0].data.push(change);
+                    ratingsChart.update();
+                    const str = `<p> In ${element["contestName"]} u got ${change} and rank ${element['rank']} </p>`;
+                    // selectingDiv.insertAdjacentHTML('beforeend',str);
+                });
+            }
+
+
+            function addData(chart, label, data, index) {
+                chart.data.labels.push(label);
+                chart.data.datasets[index].data.push(data);
+                chart.update();
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

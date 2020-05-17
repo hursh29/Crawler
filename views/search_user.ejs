@@ -1,35 +1,23 @@
 <html>
-<head> 
-    <title>Welcome</title>
+
+<head>
+    <title>Crawler</title>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> 
-    <link rel="stylesheet" href="/styles.css">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="/styles.css"> -->
 </head>
-<body>
-    <h1 class="heading"> Enter the user handle </h1>
-    <div class="container">
-        <div class="row">
-            <div class="col">
 
+<body>
+    <div class="container" style="text-align : center; background-color: whitesmoke;">
+        <h1 class="heading"> Enter the user handle </h1>
+        <form action="/ratings" method="GET">
+            <div class="form-group ">
+                <input type="text" class="form-control " name="userHandle" placeholder="Enter handle">
             </div>
-            <div class="col">
-                <form action="/tags" method="GET">
-                    
-                    <div class="form-group "> 
-                        <input type="text" class="form-control " name = "userHandle" placeholder="Enter handle">
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                </form>      
-            </div>
-            <div class="col">
-            </div>
-        </div>
-    </div> 
-    <!-- <form action="/index" method="GET">
-        <input type="text" placeholder="user handle" name = "userHandle">
-        <button > Submit </button>
-    </form> -->
+            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+        </form>
+    </div>
 </body>
 
 </html>
