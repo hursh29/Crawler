@@ -1,4 +1,3 @@
-
 const ourRequest = new XMLHttpRequest();
 let rating_map_wide = new Map();   
 rating_map_wide['newbie'] = 0 ;
@@ -12,7 +11,6 @@ rating_map_wide['international grandmaster'] = 0 ;
 rating_map_wide['grandmaster'] = 0 ;
 rating_map_wide['legendary grandmaster'] = 0 ;
 let ourRatingMap = new Map();
-
 for(let i = 0 ; i < 38 ; i++ )
     ourRatingMap[i] = 0 ; 
 

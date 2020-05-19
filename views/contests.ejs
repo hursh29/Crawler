@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <style> 
+        td {
+            border: 2px solid #333;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contests</title>
+</head>
+<body>
+    
+    <div class="container" style="text-align: center; background-color: whitesmoke; padding-bottom: 50%;">
+        <button id="Educational" class="btn btn-primary" style="width: 60%; margin-top: 15%; margin-bottom: 5%;"> Educational</button>
+        <center>
+            <table> 
+                <thead>
+                    <tr>
+                        <th> S.No </th>
+                        <th> Contest Name</th>
+                        <th> ID </th>
+                    </tr>
+                </thead>
+                <tbody id="allEducational">
+    
+                </tbody>
+            </table>
+        </center>
+       
+        <tr><td></td><td></td></tr>
+        <button id="Div 1" class="btn btn-danger" style="width: 60%; margin-top: 5%;"> Division 1</button>
+        <button id="Div 2" class="btn btn-warning" style="width: 60%; margin-top: 5%;"> Division 2</button>
+        <button id="Div 3" class="btn btn-success" style="width: 60%; margin-top: 5%;"> Division 3</button>
+        <button id="others" class="btn btn-secondary" style="width: 60%; margin-top: 5%;"> Other </button>
+        
+    <script>
+        const ourRequest = new XMLHttpRequest();
+        const url = `https://codeforces.com/api/contest.list?gym=false`;
+        ourRequest.open('GET', url);
+        ourRequest.onload = function () {
+            const ourData = JSON.parse(ourRequest.responseText);
+            if (ourData['status'] != 'OK')
+                return console.log("Sorry couldn't connect :("); 
+            renderHTML(ourData);
+            display();
+        } 
+        let contestMap = {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+            4: []
+            // globalRounds
+        };
+        function renderHTML(ourData){
+            ourData['result'].forEach(element => {
+                // console.log(element['name']); 
+                var check  = element['name'].split(' ');
+                if(check[0] == 'Educational')
+                    contestMap[0].push({contestName: element['name'], contestId: element['id'] });
+                else if(check[0] == 'Codeforces'){
+                    for(let i = 0 ; i  < check.length ; i++ )
+                        if(check[i][0] > '0' && check[i][0] < '4'){ 
+                            // console.log(check[i][0]) ; 
+                            contestMap[check[i][0]-'0'].push({contestName: element['name'], contestId: element['id'] });
+                        }
+                }
+                
+            });
+        }
+        function display(){ 
+            for (const key in contestMap) { 
+                    console.log('______________');
+                    console.log(key);
+                    console.log(contestMap[key].length);
+                    // contestMap[key].forEach(element => {
+                    //     console.log(element);
+                    // });
+            }
+        }
+        function fetchMeData(ID){
+            const request = new XMLHttpRequest();
+            let url = `https://codeforces.com/api/contest.status?contestId=`;
+            url += `${ID}`;
+            url += `&handle=`;
+            url += `<%=ejs_user%>`; 
+            request.open('GET', url);
+            request.onload = function () {
+                const userData = JSON.parse(request.responseText);
+                if (userData['status'] != 'OK')
+                    return console.log("Sorry couldn't connect :("); 
+            
+                userData['result'].forEach(element => {
+                    // if(element['verdict'] === 'OK')
+                        console.log(element['problem']['index'])
+                    // acceptedData[element['problem']['index']]++ ;
+                });
+            }
+            request.send();  
+        }
+        let c = 0 ;
+        document.getElementById('Educational').addEventListener('click',function(){
+            contestMap[0].forEach(element => {
+                c++ ;
+                // userSubmissions = fetchMeData(element['contestId']);
+                document.getElementById('allEducational').insertAdjacentHTML('beforeEnd',`<tr><td>${c}</td><td> ${element['contestName']} </td> <td>${element['contestId']} </td></tr>`);
+            });
+        });
+
+        ourRequest.send();
+    </script>
+</body>
+</html>
